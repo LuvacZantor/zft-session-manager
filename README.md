@@ -1,37 +1,48 @@
 # ZFT Session Manager
 
-Foundry VTT V13 development module (`0.1.0-dev.1`).
+**Foundry V13 development build:** `0.1.0-dev.2`
 
-## Purpose
-One shared GM-confirmed session identity for ZFT modules, independent of combat lifecycle.
+Separate GM-confirmed session lifecycle service for ZFT modules. Does not require ZFT Tools or Combat Log.
 
-## Behavior
-- An active GM is offered Start/Resume/Not Now after connecting when no session is active; no automatic session start.
-- Session records persist in world setting `zft-session-manager.registry` with stable ID, name, real-world start/end timestamps, and active ID.
-- `game.user.isGM` is required to start, resume, end, or open management.
-- Start posts the Calendaria Chronicle v1.6.0 design to **normal** Foundry Chat, if Calendaria is enabled.
-- Resuming never posts the Chronicle again. Refreshing or reconnecting never auto-posts.
-- Chronicle failures do **not** cancel session creation. The status remains pending for manual review; there is no automatic retry to avoid duplicate posts.
-- Optional Calendaria dependency; game session management works without it.
-- The manager is accessible programmatically as `ZFTSessionManager.api.openManager()` in the browser console. A dedicated settings/menu UI is planned after V13 live test.
+## Available functionality
 
-## API
+- Start a named session (name defaults to real-world date) after GM confirmation.
+- End an active session or resume an ended session.
+- Persist session ID, name, start/end timestamps, creator and Chronicle status in a world setting.
+- Prompt the designated active GM on login when no session is open, unless disabled in settings.
+- Open session manager manually through **Configure Settings → Module Settings → ZFT Session Manager → Open Session Manager**.
+- Inspect recent session history from the management dialog.
+- Post Calendaria Chronicle v1.6.0 (same visual/date/time rules) to normal chat on **new** session start; never on resume/refresh.
+- If Calendaria is disabled or errors, keep the session active and warn the GM. Announcement is not automatically retried.
+
+## Shared API
+
 `globalThis.ZFTSessionManager.api` exposes `getActiveSession()`, `listSessions()`, `getSession(id)`, `startSession(name)`, `endSession()`, `resumeSession(id)`, `openManager()`.
 
-Hooks: `zftSessionManager.started`, `zftSessionManager.ended`, `zftSessionManager.resumed`. Payloads are session snapshots. Consumers must validate GM visibility and permissions of their own data.
+Hooks: `zftSessionManager.started`, `zftSessionManager.ended`, `zftSessionManager.resumed`. Consumers must enforce visibility controls for their own data.
 
-## Limitations before stable release
-- Cross-client GM operation locking is not yet atomic; simultaneous GM submissions could race. Use one active GM when testing.
-- No migration from Combat Log's existing one-time sessionStart setting.
-- No session-specific Combat Log integration yet.
-- No dedicated toolbar/button; dialog offered on GM ready, manual access through API.
-- No live Foundry V13 or V14 validation; do not treat this as a production build.
+## Limitations
 
-## V13 smoke checks
-1. Enable module without Calendaria, confirm manager still starts sessions and warns on Chronicle.
-2. With Calendaria enabled, Start New and inspect Chronicle chat message and date formatting.
-3. Refresh/reconnect: no duplicate Chronicle; existing session stays active.
-4. End; confirm endedAt and activeId null; Resume Selected: no new Chronicle.
-5. Log in as player and verify player cannot manage sessions. Test second GM client for concurrency limitation.
+This is a test build, not a verified production release. GM coordination is **not transactionally locked across clients**; two GMs acting at the exact same time could race. Use one GM for initial tests. Chronicle's `attempted` state is saved before creating the chat message, avoiding normal reconnect duplicates, but an interrupted write can leave ambiguous delivery requiring manual inspection. The module has no automatic import of Combat Log's old session timestamp, nor automatic Combat Log or ZFT Tools integration.
 
-No code has been promoted to `main`.
+## Test plan
+
+1. Enable in Foundry V13 with Calendaria enabled. Sign in as GM with no active session. Verify the session dialog appears.
+2. Start a named session. Check that exactly one Chronicle message appears in ordinary Chat, and the session is listed as Active.
+3. Refresh and reconnect. Verify no repeat Chronicle and the session remains active.
+4. Open Module Settings → Session Manager. End session, inspect history, resume it. Verify resume does not post Chronicle.
+5. End and start a different session: verify a fresh Chronicle and two historical records.
+6. Disable Calendaria. Start another session and ensure the session is still created but warns about Chronicle.
+7. Connect as player: check they cannot use the GM-only manager actions.
+
+**Do not promote to `main` until live V13 tests and GM/player visibility tests pass.**
+
+## dev.3 updates
+The management window is a custom ZFT-themed application (available from the module settings menu and via `ZFTSessionManager.api.openManager()`). Confirming the end of a session sends a separate Calendaria Chronicle chat message labelled SESSION ENDS; start messages are labelled SESSION BEGINS. Both announcements use Calendaria's current in-game time. Resume does not announce. Legacy sessions from dev.2 are kept; their end-chronicle field is added when next ended. Chat post attempts are reserved before sending and never automatically retried after an uncertain failure.
+
+## Launcher and minimize (dev.4)
+
+GM-only Session Manager control appears in Foundry Scene Controls under Token tools. Click to toggle the dashboard. Window header Minimize collapses its content; click Restore to expand it. This does not end or change the session. Integration is self-contained, so ZFT Tools is optional.
+
+## ZFT Tools integration (dev.5)
+When ZFT Tools 0.1.0-dev.8 is active, Session Manager contributes a GM-only calendar action inside the existing ZFT Tools control group using `zft-tools.collectTools`. It toggles the dashboard. The standalone Token Scene Controls action is used only when ZFT Tools is not enabled. Neither launcher ends the game session when its window closes.

@@ -1,1 +1,35 @@
-/* ZFT Session Manager v0.1.0-dev.1. Chronicle intentionally preserves reference inline appearance. */
+
+/* Custom ZFT arcane/gothic dashboard, visually related to Action HUD's themed panels. */
+#zft-session-dashboard { background:#15121d !important; border:1px solid #665374; border-radius:12px; box-shadow:0 12px 38px #000b,0 0 20px #351f4855; overflow:hidden; color:#ece5f0; }
+#zft-session-dashboard .window-header { background:linear-gradient(90deg,#251b32,#12101a); border-bottom:1px solid #544260; color:#f4eafa; }
+#zft-session-dashboard .window-content { background:#15121d; padding:0; overflow:auto; color:#eee7f4; }
+.zft-sm-dashboard { padding:0 15px 15px; display:flex;flex-direction:column; gap:12px; font-family:inherit; }
+.zft-sm-hero { padding:16px 9px 10px; text-align:center; border-bottom:1px solid #584267; background:radial-gradient(ellipse at top,#342140 0,transparent 75%); }
+.zft-sm-kicker,.zft-sm-eyebrow {font-size:10px;letter-spacing:2px;color:#c5a5d5;font-weight:750;}
+.zft-sm-title {display:flex;justify-content:center;align-items:center;gap:10px;margin:9px 0 3px;color:#d8b9e8;}
+.zft-sm-title i {font-size:24px;}.zft-sm-title h2 {margin:0;border:0;font:700 22px Georgia,serif;letter-spacing:2px;color:#f0e8ef;}
+.zft-sm-hero p {margin:4px 0 0;color:#ada0b8;font-size:12px;}
+.zft-sm-panel {background:linear-gradient(145deg,#24202e,#1b1725);border:1px solid #584766;border-radius:9px;padding:14px;display:flex;flex-direction:column;gap:9px;}
+.zft-sm-panel-top {display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.zft-sm-pill {font-size:10px;font-weight:800;letter-spacing:1px;padding:4px 8px;border-radius:12px;border:1px solid #6c5879;color:#c5b5cd;background:#352b3c;white-space:nowrap;}
+.zft-sm-pill.active {border-color:#72916f;color:#badcaf;background:#233327;}.zft-sm-pill.ended {border-color:#6b6174;color:#b8aabf;background:#292431;}
+.zft-sm-panel h3 {font:700 18px Georgia,serif;color:#f4e8ee;margin:5px 0 0;overflow-wrap:anywhere;}
+.zft-sm-meta,.zft-sm-description {color:#bdafc7;font-size:12px;margin:0;line-height:1.5;}
+.zft-sm-label {font-size:10px;letter-spacing:1.5px;color:#c9b3d7;font-weight:bold;margin-top:5px;}
+.zft-sm-dashboard input,.zft-sm-dashboard select {background:#110f18 !important;border:1px solid #665274 !important;color:#f2eaf5 !important;padding:7px 10px !important;min-height:36px;border-radius:6px;width:100%;height:auto;}
+.zft-sm-dashboard .zft-sm-action {width:100%;margin:3px 0 0;min-height:37px;border-radius:6px;border:1px solid #766184;color:#f9f1fb;font-size:12px;font-weight:800;letter-spacing:1px;box-shadow:none;cursor:pointer;}
+.zft-sm-dashboard .zft-sm-action.primary {background:linear-gradient(90deg,#584077,#7c5a91);}.zft-sm-dashboard .zft-sm-action.danger {background:linear-gradient(90deg,#753947,#994955);border-color:#a16b78;}.zft-sm-dashboard .zft-sm-action.secondary {background:#33253f;}
+.zft-sm-dashboard .zft-sm-action:hover {filter:brightness(1.17);box-shadow:0 0 12px #9978bc50;}.zft-sm-dashboard .zft-sm-action:disabled {opacity:.55;cursor:wait;}
+.zft-sm-separator {text-align:center;font-size:10px;letter-spacing:1.5px;color:#a797b2;padding-top:8px;border-top:1px solid #44384f;}
+.zft-sm-history {border:1px solid #554362;border-radius:8px;background:#1e1927;margin:0;overflow:hidden;padding:0;}
+.zft-sm-history summary {display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:12px;color:#dec9e9;font-size:12px;letter-spacing:1px;font-weight:750;list-style:none;}
+.zft-sm-history summary::-webkit-details-marker {display:none;}.zft-sm-history summary small {font-size:10px;letter-spacing:0;color:#afa2bc;margin-left:6px;}
+.zft-sm-history[open] summary>i {transform:rotate(180deg);}.zft-sm-history ul {padding:0 10px 8px;list-style:none;margin:0;max-height:245px;overflow-y:auto;}
+.zft-sm-history li {display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid #493b52;padding:9px 2px;}
+.zft-sm-history-info {display:flex;flex-direction:column;gap:4px;min-width:0;}.zft-sm-history-info strong {color:#efe7f4;overflow-wrap:anywhere;font-size:12px;}.zft-sm-history-info small {color:#a79aac;font-size:10px;}
+.zft-sm-history .zft-sm-empty {color:#a99bad;}.zft-sm-footer {text-align:center;color:#aa9eb3;font-size:10px;line-height:1.5;padding:0 6px;}.zft-sm-footer span {color:#a9df93;font-weight:bold;letter-spacing:1px;}
+
+/* Compact minimized header, preserving the window for quick restore. */
+.zft-session-manager-window.zft-sm-minimized .window-content {display:none !important;}
+.zft-session-manager-window.zft-sm-minimized {min-height:0 !important;}
+.zft-session-manager-window .zft-sm-minimize {cursor:pointer;}

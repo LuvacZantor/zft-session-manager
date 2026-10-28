@@ -1,8 +1,8 @@
 {
   "id": "zft-session-manager",
   "title": "ZFT Session Manager",
-  "description": "GM-controlled game session lifecycle, shared ZFT API, and optional Calendaria Chronicle announcement.",
-  "version": "0.1.0-dev.1",
+  "description": "GM-confirmed campaign sessions and optional Calendaria Chronicle integration.",
+  "version": "0.1.0-dev.5",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
@@ -20,15 +20,13 @@
     "styles/session-manager.css"
   ],
   "relationships": {
-    "systems": [
-      {
-        "id": "dnd5e",
-        "type": "system"
-      }
-    ],
     "recommends": [
       {
         "id": "calendaria",
+        "type": "module"
+      },
+      {
+        "id": "zft-tools",
         "type": "module"
       }
     ]
